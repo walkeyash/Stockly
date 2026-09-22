@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { DASHBOARD_URL } from '../../config';
 import './landing.css';
 
 const FEATURES = [
@@ -51,7 +52,7 @@ function Stats() {
                     <img src="media/images/ecosystem.png" alt="Stockly Ecosystem" className="lp-img" />
                     <div className="lp-link-row">
                         <Link to="/product" className="lp-text-link">Explore products →</Link>
-                        <a href="http://localhost:3001" target="_blank" rel="noreferrer" className="lp-text-link">Try demo →</a>
+                        <a href={DASHBOARD_URL} target="_blank" rel="noreferrer" className="lp-text-link">Try demo →</a>
                     </div>
                 </div>
             </div>

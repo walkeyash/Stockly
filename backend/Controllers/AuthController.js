@@ -3,6 +3,15 @@ const { createSecretToken } = require("../util/SecretToken");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const isProduction = process.env.NODE_ENV === "production";
+const getCookieOptions = () => ({
+    path: "/",
+    httpOnly: false,
+    maxAge: 3 * 24 * 60 * 60 * 1000,
+    sameSite: isProduction ? "none" : "lax",
+    secure: isProduction,
+});
+
 module.exports.Signup = async (req, res, next) => {
     try {
         const { email, password, username, createdAt } = req.body;
@@ -12,16 +21,9 @@ module.exports.Signup = async (req, res, next) => {
         }
         const user = await User.create({ email, password, username, createdAt });
         const token = createSecretToken(user._id);
-        res.cookie("token", token, {
-            path: "/",
-            httpOnly: false,
-            maxAge: 3 * 24 * 60 * 60 * 1000
-        });
-        res.cookie("username", user.username, {
-            path: "/",
-            httpOnly: false,
-            maxAge: 3 * 24 * 60 * 60 * 1000
-        });
+        const cookieOpts = getCookieOptions();
+        res.cookie("token", token, cookieOpts);
+        res.cookie("username", user.username, cookieOpts);
         res.status(201).json({
             message: "User signed up successfully",
             success: true,
@@ -49,16 +51,9 @@ module.exports.Login = async (req, res, next) => {
             return res.json({ message: 'Incorrect password or email', success: false });
         }
         const token = createSecretToken(user._id);
-        res.cookie("token", token, {
-            path: "/",
-            httpOnly: false,
-            maxAge: 3 * 24 * 60 * 60 * 1000
-        });
-        res.cookie("username", user.username, {
-            path: "/",
-            httpOnly: false,
-            maxAge: 3 * 24 * 60 * 60 * 1000
-        });
+        const cookieOpts = getCookieOptions();
+        res.cookie("token", token, cookieOpts);
+        res.cookie("username", user.username, cookieOpts);
         res.status(201).json({
             message: "User logged in successfully",
             success: true,
@@ -88,14 +83,16 @@ module.exports.userVerification = (req, res) => {
 };
 
 module.exports.Logout = (req, res) => {
-    const cookieOptions = [
+    const cookieOpts = getCookieOptions();
+    const clearOpts = [
+        cookieOpts,
         { path: "/" },
         { path: "/", domain: "localhost" },
         { path: "/", domain: ".localhost" },
         { path: "/", domain: "127.0.0.1" },
     ];
 
-    cookieOptions.forEach((opts) => {
+    clearOpts.forEach((opts) => {
         res.cookie("token", "", { ...opts, expires: new Date(0), httpOnly: false });
         res.cookie("username", "", { ...opts, expires: new Date(0), httpOnly: false });
         res.clearCookie("token", opts);

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { API_BASE_URL } from "../config";
 
 const Orders = () => {
     const [allOrders, setAllOrders] = useState([]);
@@ -8,7 +9,7 @@ const Orders = () => {
     const [filter, setFilter] = useState("ALL");
 
     const fetchOrders = () => {
-        axios.get("http://localhost:3002/allOrders")
+        axios.get(`${API_BASE_URL}/allOrders`)
             .then((res) => {
                 setAllOrders(res.data);
                 setLoading(false);

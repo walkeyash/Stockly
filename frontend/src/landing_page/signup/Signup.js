@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL, DASHBOARD_URL } from '../../config';
 import './auth.css';
 
 function Signup() {
@@ -21,7 +22,7 @@ function Signup() {
         setLoading(true);
         try {
             const { data } = await axios.post(
-                "http://localhost:3002/signup",
+                `${API_BASE_URL}/signup`,
                 { ...inputValue },
                 { withCredentials: true }
             );
@@ -33,7 +34,7 @@ function Signup() {
                 document.cookie = `username=${encodeURIComponent(user.username)}; path=/; max-age=259200`;
                 if (token) document.cookie = `token=${token}; path=/; max-age=259200`;
                 setTimeout(() => {
-                    window.location.href = `http://localhost:3001?user=${encodeURIComponent(user.username)}`;
+                    window.location.href = `${DASHBOARD_URL}?user=${encodeURIComponent(user.username)}`;
                 }, 800);
             } else {
                 setMessage(msg || "Signup failed. Please try again.");

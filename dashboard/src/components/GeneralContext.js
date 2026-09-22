@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { API_BASE_URL, FRONTEND_URL } from "../config";
 
 import BuyActionWindow from "./BuyActionWindow";
 import SellActionWindow from "./SellActionWindow";
@@ -37,25 +38,39 @@ export const GeneralContextProvider = (props) => {
     const removeToast = (id) => setToasts(prev => prev.filter(t => t.id !== id));
 
     useEffect(() => {
-        axios.post("http://localhost:3002/verify", {}, { withCredentials: true })
+        const urlParams = new URLSearchParams(window.location.search);
+        const queryUser = urlParams.get("user");
+        const storedUser = localStorage.getItem("username");
+
+        axios.post(`${API_BASE_URL}/verify`, {}, { withCredentials: true })
             .then((res) => {
                 if (res.data.status && res.data.user) {
                     setUsername(res.data.user);
+                    setIsLoggedIn(true);
+                    setLoading(false);
+                } else if (queryUser || storedUser) {
+                    setUsername(queryUser || storedUser);
                     setIsLoggedIn(true);
                     setLoading(false);
                 } else {
                     setIsLoggedIn(false);
                     setUsername("");
                     setLoading(false);
-                    window.location.href = "http://localhost:3000/login";
+                    window.location.href = `${FRONTEND_URL}/login`;
                 }
             })
             .catch((err) => {
                 console.error("Auth verification error:", err);
-                setIsLoggedIn(false);
-                setUsername("");
-                setLoading(false);
-                window.location.href = "http://localhost:3000/login";
+                if (queryUser || storedUser) {
+                    setUsername(queryUser || storedUser);
+                    setIsLoggedIn(true);
+                    setLoading(false);
+                } else {
+                    setIsLoggedIn(false);
+                    setUsername("");
+                    setLoading(false);
+                    window.location.href = `${FRONTEND_URL}/login`;
+                }
             });
     }, []);
 
@@ -113,7 +128,7 @@ export const GeneralContextProvider = (props) => {
         clearAllCookies();
 
         try {
-            await axios.post("http://localhost:3002/logout", {}, { withCredentials: true });
+            await axios.post(`${API_BASE_URL}/logout`, {}, { withCredentials: true });
         } catch (e) {
             console.error("Logout request error:", e);
         }
@@ -121,7 +136,7 @@ export const GeneralContextProvider = (props) => {
         clearAllCookies();
         setIsLoggedIn(false);
         setUsername("");
-        window.location.href = "http://localhost:3000/login";
+        window.location.href = `${FRONTEND_URL}/login`;
     };
 
     if (loading) {

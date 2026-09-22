@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL, DASHBOARD_URL } from '../../config';
 import './auth.css';
 
 function Login() {
@@ -21,7 +22,7 @@ function Login() {
         setLoading(true);
         try {
             const { data } = await axios.post(
-                "http://localhost:3002/login",
+                `${API_BASE_URL}/login`,
                 { ...inputValue },
                 { withCredentials: true }
             );
@@ -34,7 +35,7 @@ function Login() {
                 document.cookie = `username=${encodeURIComponent(uname)}; path=/; max-age=259200`;
                 if (token) document.cookie = `token=${token}; path=/; max-age=259200`;
                 setTimeout(() => {
-                    window.location.href = `http://localhost:3001?user=${encodeURIComponent(uname)}`;
+                    window.location.href = `${DASHBOARD_URL}?user=${encodeURIComponent(uname)}`;
                 }, 800);
             } else {
                 setMessage(msg || "Invalid credentials. Please try again.");

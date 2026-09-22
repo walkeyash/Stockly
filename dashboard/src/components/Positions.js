@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../config";
 
 function tick(price) {
     const volatility = 0.0012;
@@ -14,7 +15,7 @@ const Positions = () => {
     const [loading, setLoading] = useState(true);
 
     const fetchPositions = () => {
-        axios.get("http://localhost:3002/allPositions")
+        axios.get(`${API_BASE_URL}/allPositions`)
             .then((res) => {
                 setAllPositions(res.data);
                 const seed = {};

@@ -1,9 +1,7 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Tooltip, Grow } from "@mui/material";
 import {
     BarChartOutlined,
-    KeyboardArrowDown,
-    KeyboardArrowUp,
     MoreHoriz,
 } from "@mui/icons-material";
 import { watchlist } from "../data/data";

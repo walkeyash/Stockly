@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import GeneralContext from "./GeneralContext";
+import { API_BASE_URL } from "../config";
 
 // Simulate a realistic small market tick
 function tick(price) {
@@ -22,13 +23,13 @@ const Summary = () => {
     const [margin,    setMargin]    = useState(50000);
 
     useEffect(() => {
-        axios.get("http://localhost:3002/allHoldings")
+        axios.get(`${API_BASE_URL}/allHoldings`)
             .then(r => setHoldings(r.data)).catch(() => {});
-        axios.get("http://localhost:3002/allOrders")
+        axios.get(`${API_BASE_URL}/allOrders`)
             .then(r => setOrders(r.data)).catch(() => {});
-        axios.get("http://localhost:3002/allPositions")
+        axios.get(`${API_BASE_URL}/allPositions`)
             .then(r => setPositions(r.data)).catch(() => {});
-        axios.get("http://localhost:3002/funds")
+        axios.get(`${API_BASE_URL}/funds`)
             .then(r => { if (r.data && r.data.balance !== undefined) setMargin(r.data.balance); }).catch(() => {});
     }, []);
 
@@ -50,6 +51,7 @@ const Summary = () => {
             });
         }, 2000);
         return () => clearInterval(interval);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [holdings.length, positions.length]);
 
     // ── Derived stats ────────────────────────────────────────────

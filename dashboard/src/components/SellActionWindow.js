@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import GeneralContext from "./GeneralContext";
 import { watchlist } from "../data/data";
+import { API_BASE_URL } from "../config";
 import "./BuyActionWindow.css";
 
 const SellActionWindow = ({ uid, initialPrice }) => {
@@ -18,7 +19,7 @@ const SellActionWindow = ({ uid, initialPrice }) => {
     const handleSellClick = async (e) => {
         if (e) e.preventDefault();
         try {
-            await axios.post("http://localhost:3002/newOrder", {
+            await axios.post(`${API_BASE_URL}/newOrder`, {
                 name:  uid,
                 qty:   Number(stockQuantity),
                 price: Number(stockPrice),

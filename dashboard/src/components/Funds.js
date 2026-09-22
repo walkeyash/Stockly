@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import GeneralContext from "./GeneralContext";
+import { API_BASE_URL } from "../config";
 
 const Funds = () => {
     const { showToast } = useContext(GeneralContext);
     const [balance, setBalance] = useState(50000);
     const [holdings, setHoldings] = useState([]);
-    const [loading, setLoading] = useState(true);
 
     // Modal states
     const [showAddModal, setShowAddModal] = useState(false);
@@ -16,8 +16,8 @@ const Funds = () => {
 
     const fetchFundsData = () => {
         Promise.all([
-            axios.get("http://localhost:3002/funds"),
-            axios.get("http://localhost:3002/allHoldings"),
+            axios.get(`${API_BASE_URL}/funds`),
+            axios.get(`${API_BASE_URL}/allHoldings`),
         ])
             .then(([fundsRes, holdingsRes]) => {
                 if (fundsRes.data && fundsRes.data.balance !== undefined) {
@@ -26,9 +26,8 @@ const Funds = () => {
                 if (holdingsRes.data) {
                     setHoldings(holdingsRes.data);
                 }
-                setLoading(false);
             })
-            .catch(() => setLoading(false));
+            .catch(() => {});
     };
 
     useEffect(() => {
@@ -46,7 +45,7 @@ const Funds = () => {
         if (!num || num <= 0) return;
         setActionLoading(true);
         try {
-            const res = await axios.post("http://localhost:3002/addFunds", { amount: num });
+            const res = await axios.post(`${API_BASE_URL}/addFunds`, { amount: num });
             if (res.data && res.data.balance !== undefined) {
                 setBalance(res.data.balance);
             }
@@ -71,7 +70,7 @@ const Funds = () => {
         }
         setActionLoading(true);
         try {
-            const res = await axios.post("http://localhost:3002/withdrawFunds", { amount: num });
+            const res = await axios.post(`${API_BASE_URL}/withdrawFunds`, { amount: num });
             if (res.data && res.data.balance !== undefined) {
                 setBalance(res.data.balance);
             }

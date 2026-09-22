@@ -18,6 +18,7 @@ function Team() {
                 >
                     <img
                         src='media/images/Yash.jpeg'
+                        alt='Yash Walke'
                         style={{
                             borderRadius: "50%",
                             width: "250px",

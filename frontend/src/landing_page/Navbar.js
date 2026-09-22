@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE_URL, DASHBOARD_URL } from '../config';
 import './navbar.css';
 
 function Navbar() {
@@ -14,7 +15,7 @@ function Navbar() {
 
     useEffect(() => {
         if (hideNavbar) return;
-        axios.post("http://localhost:3002/verify", {}, { withCredentials: true })
+        axios.post(`${API_BASE_URL}/verify`, {}, { withCredentials: true })
             .then((res) => {
                 if (res.data.status && res.data.user) setUser(res.data.user);
                 else setUser("");
@@ -39,11 +40,11 @@ function Navbar() {
             sessionStorage.clear();
         };
         clearAllCookies();
-        try { await axios.post("http://localhost:3002/logout", {}, { withCredentials: true }); }
+        try { await axios.post(`${API_BASE_URL}/logout`, {}, { withCredentials: true }); }
         catch (err) { /* ignore */ }
         clearAllCookies();
         setUser("");
-        window.location.href = "http://localhost:3000";
+        window.location.href = "/";
     };
 
     if (hideNavbar) return null;
@@ -93,7 +94,7 @@ function Navbar() {
                     <li>
                         <a
                             className="nav-dashboard-btn"
-                            href="http://localhost:3001"
+                            href={DASHBOARD_URL}
                             target="_blank"
                             rel="noreferrer"
                         >
@@ -122,7 +123,7 @@ function Navbar() {
                     ) : (
                         <button className="mobile-nav-link" style={{ border: "none", background: "none", textAlign: "left", cursor: "pointer" }} onClick={handleLogout}>Logout</button>
                     )}
-                    <a href="http://localhost:3001" className="mobile-nav-link nav-dashboard-btn" style={{ marginTop: "8px" }}>Dashboard →</a>
+                    <a href={DASHBOARD_URL} className="mobile-nav-link nav-dashboard-btn" style={{ marginTop: "8px" }}>Dashboard →</a>
                 </div>
             )}
         </nav>
