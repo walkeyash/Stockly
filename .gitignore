@@ -1,0 +1,66 @@
+# ==========================================
+# Stockly - Monorepo .gitignore
+# ==========================================
+
+# ── Dependencies ───────────────────────────
+node_modules/
+*/node_modules/
+backend/node_modules/
+frontend/node_modules/
+dashboard/node_modules/
+.pnp
+.pnp.js
+
+# ── Environment Variables & Secrets ────────
+# CRITICAL: Never commit .env files to GitHub
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+backend/.env
+frontend/.env
+dashboard/.env
+
+# ── Production Builds ──────────────────────
+build/
+*/build/
+frontend/build/
+dashboard/build/
+dist/
+*/dist/
+
+# ── Logs & Debugging ───────────────────────
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# ── Testing & Coverage ─────────────────────
+coverage/
+*/coverage/
+*.lcov
+.nyc_output
+
+# ── Editor & OS Artifacts ──────────────────
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# ── Cache & Temp ───────────────────────────
+.eslintcache
+.cache
+tmp/
+temp/
